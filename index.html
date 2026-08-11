@@ -240,7 +240,7 @@
     <p class="eyebrow">RoAI · Core Engine team · industrial internship</p>
     <h2>Diffusion-based motion planning on a real welding robot</h2>
     <p>RoAI's production planner is built on CuRobo. It generates a single optimized path per query. I explored diffusion instead, since it holds many valid candidate paths at once — so a shifted part or fixture doesn't force replanning from scratch.</p>
-    <p>I took Motion Planning Diffusion (Carvalho et al., IROS 2023 / T-RO 2025) off synthetic benchmark arms and onto a 4-arm Kawasaki BX200L spot-welding cell. I re-modeled the robot and gun, then decomposed the gun's non-convex geometry with VHACD to stop false collisions in its own gap. Any path from collision-sphere guidance still had to pass an exact FCL mesh check.</p>
+    <p>I took Motion Planning Diffusion (Carvalho et al., IROS 2023 / T-RO 2025) off synthetic benchmark arms and onto a 4-arm Kawasaki BX200L spot-welding cell. I re-modeled the robot and gun, then decomposed the gun's non-convex geometry with VHACD to stop false collisions in its own gap. Any path from collision-sphere guidance still had to pass an exact FCL mesh check, cross-checked in PyBullet.</p>
 
     <div class="vhacd-diagram">
       <svg viewBox="0 0 640 210" role="img" aria-labelledby="vhacdTitle" aria-describedby="vhacdDesc">
@@ -328,7 +328,7 @@
     <p class="eyebrow">Advised by Prof. Seongho Bae, mentored by Daegyu Lim (Robros)</p>
     <p>Robot manipulation data is expensive to collect live. So training often starts from a fixed offline dataset, then fine-tunes with limited online interaction. That raises a question: should replay sampling look the same in both phases? Naive answers — like always prioritizing high-reward or high-TD-error trajectories — quietly collapse behavior diversity when the data is fixed and TD-error isn't trustworthy yet.</p>
     <p>We built on QC-FQL (Li et al., NeurIPS 2025) — action chunking added to Flow Q-Learning (Park et al., 2025) — with a two-phase replay sampler on top, in the spirit of Prioritized Experience Replay and Prioritized Trajectory Replay but reworked for this setting: cluster-uniform sampling offline, to keep every behavior mode in view, then rank-based TD-error sampling online, once the critic has real signal to work with.</p>
-    <p>The results also differed by task — and the reason was revealing. On the short-horizon, dense-reward task, TD-error had already faded to near-zero by the end of offline training. That left little for online sampling to prioritize, so the combination raised max success rate by only +0.06 offline and +0.04 online. On the long-horizon, sparse-reward task, TD-error stayed meaningful much longer. Both phases had real signal to work with there, and the combination helped the most: max success rate rose +0.16 offline, +0.22 more online.</p>
+    <p>The results also differed by task on Robomimic (MuJoCo-based manipulation benchmarks) — and the reason was revealing. On the short-horizon, dense-reward task, TD-error had already faded to near-zero by the end of offline training. That left little for online sampling to prioritize, so the combination raised max success rate by only +0.06 offline and +0.04 online. On the long-horizon, sparse-reward task, TD-error stayed meaningful much longer. Both phases had real signal to work with there, and the combination helped the most: max success rate rose +0.16 offline, +0.22 more online.</p>
     <div class="tags">
       <span class="tag">reinforcement learning</span>
       <span class="tag">offline-to-online RL</span>
